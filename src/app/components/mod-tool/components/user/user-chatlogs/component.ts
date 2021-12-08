@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ModtoolUserChatlogParserVisit } from '@nitrots/nitro-renderer';
+import { ChatRecordData } from '@nitrots/nitro-renderer';
 import { NavigatorService } from '../../../../navigator/services/navigator.service';
 import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
 import { ModToolService } from '../../../services/mod-tool.service';
@@ -33,7 +33,7 @@ export class ModToolUserChatlogsComponent extends ModToolChatlogsComponent
         return `Chatlogs: ${this.user.username}`;
     }
 
-    public getData(): ModtoolUserChatlogParserVisit[]
+    public getData(): ChatRecordData[]
     {
         if(!this._modToolService.roomVisits) return [];
 

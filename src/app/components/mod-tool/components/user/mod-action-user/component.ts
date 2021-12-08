@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ModtoolEventAlertComposer, ModtoolSanctionAlertComposer, ModtoolSanctionBanComposer, ModtoolSanctionKickComposer, ModtoolSanctionMuteComposer, ModtoolSanctionTradelockComposer, Nitro } from '@nitrots/nitro-renderer';
+import { ModAlertMessageComposer, ModBanMessageComposer, ModKickMessageComposer, ModMessageMessageComposer, ModMuteMessageComposer, ModTradingLockMessageComposer, Nitro } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../../../notification/services/notification.service';
 import { ModToolService } from '../../../services/mod-tool.service';
 import { ModTool } from '../../tool.component';
@@ -78,11 +78,11 @@ export class ModToolModActionUserComponent extends ModTool implements OnInit, On
                         this._notifications.alert('You have insufficient permissions.');
                         return;
                     }
-                    Nitro.instance.communication.connection.send(new ModtoolSanctionAlertComposer(this.user.id, this.message, parseInt(this.cfhType)));
+                    Nitro.instance.communication.connection.send(new ModAlertMessageComposer(this.user.id, this.message, parseInt(this.cfhType)));
                 }
                 break;
             case ModActionDefinition.MUTE: {
-                Nitro.instance.communication.connection.send(new ModtoolSanctionMuteComposer(this.user.id, this.message, parseInt(this.cfhType)));
+                Nitro.instance.communication.connection.send(new ModMuteMessageComposer(this.user.id, this.message, parseInt(this.cfhType)));
             }
                 break;
             case ModActionDefinition.BAN:
@@ -93,7 +93,7 @@ export class ModToolModActionUserComponent extends ModTool implements OnInit, On
                         return;
                     }
 
-                    Nitro.instance.communication.connection.send(new ModtoolSanctionBanComposer(this.user.id, this.message, parseInt(this.cfhType), parseInt(this.sanction), (sanction.actionId == 106)));
+                    Nitro.instance.communication.connection.send(new ModBanMessageComposer(this.user.id, this.message, parseInt(this.cfhType), parseInt(this.sanction), (sanction.actionId == 106)));
                 }
                 break;
 
@@ -105,7 +105,7 @@ export class ModToolModActionUserComponent extends ModTool implements OnInit, On
                         return;
                     }
 
-                    Nitro.instance.communication.connection.send(new ModtoolSanctionKickComposer(this.user.id, this.message, parseInt(this.cfhType)));
+                    Nitro.instance.communication.connection.send(new ModKickMessageComposer(this.user.id, this.message, parseInt(this.cfhType)));
 
                 }
                 break;
@@ -113,7 +113,7 @@ export class ModToolModActionUserComponent extends ModTool implements OnInit, On
             case ModActionDefinition.TRADE_LOCK:
                 {
                     const local6 = sanction._Str_25670 * 60;
-                    Nitro.instance.communication.connection.send(new ModtoolSanctionTradelockComposer(this.user.id, this.message, local6, parseInt(this.cfhType)));
+                    Nitro.instance.communication.connection.send(new ModTradingLockMessageComposer(this.user.id, this.message, local6, parseInt(this.cfhType)));
                 }
                 break;
 
@@ -125,7 +125,7 @@ export class ModToolModActionUserComponent extends ModTool implements OnInit, On
                         return;
                     }
 
-                    Nitro.instance.communication.connection.send(new ModtoolEventAlertComposer(this.user.id, this.message,  parseInt(this.cfhType)));
+                    Nitro.instance.communication.connection.send(new ModMessageMessageComposer(this.user.id, this.message,  parseInt(this.cfhType)));
                 }
                 break;
         }

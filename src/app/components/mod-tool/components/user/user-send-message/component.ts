@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ModtoolEventAlertComposer, Nitro } from '@nitrots/nitro-renderer';
+import { ModMessageMessageComposer, Nitro } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../../../notification/services/notification.service';
 import { ModToolUserInfoService } from '../../../services/mod-tool-user-info.service';
 import { ModToolService } from '../../../services/mod-tool.service';
@@ -70,7 +70,7 @@ export class ModToolUserSendMessageComponent extends ModTool implements OnInit, 
             return;
         }
 
-        Nitro.instance.communication.connection.send(new ModtoolEventAlertComposer(this.user.id, this.message, -999));
+        Nitro.instance.communication.connection.send(new ModMessageMessageComposer(this.user.id, this.message, -999));
         this._modToolService.showSendUserMessage = false;
     }
 

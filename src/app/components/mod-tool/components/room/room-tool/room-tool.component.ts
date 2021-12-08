@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { GetRoomChatlogMessageComposer, ModtoolChangeRoomSettingsComposer, ModtoolRoomAlertComposer, ModtoolRoomInfoParser, Nitro } from '@nitrots/nitro-renderer';
+import { GetRoomChatlogMessageComposer, ModerateRoomMessageComposer, ModeratorActionMessageComposer, ModeratorRoomInfoMessageParser, Nitro } from '@nitrots/nitro-renderer';
 import { NavigatorService } from '../../../../navigator/services/navigator.service';
 import { NotificationService } from '../../../../notification/services/notification.service';
 import { ModToolService } from '../../../services/mod-tool.service';
@@ -48,15 +48,15 @@ export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
             return;
         }
 
-        Nitro.instance.communication.connection.send(new ModtoolRoomAlertComposer(1, this.message, ''));
+        Nitro.instance.communication.connection.send(new ModeratorActionMessageComposer(1, this.message, ''));
 
         if(this.kickUsers || this.changeTitle || this.lockDoor)
         {
-            const roomId = this.room.id;
+            const roomId = this.room.data.flatId;
             const lockDoor = this.lockDoor ? 1 : 0;
             const changeTitle = this.changeTitle ? 1 : 0;
             const kickUsers = this.kickUsers ? 1 : 0;
-            Nitro.instance.communication.connection.send(new ModtoolChangeRoomSettingsComposer(roomId, lockDoor, changeTitle, kickUsers));
+            Nitro.instance.communication.connection.send(new ModerateRoomMessageComposer(roomId, lockDoor, changeTitle, kickUsers));
         }
 
         this._modToolService.showRoomTools = false;
@@ -64,21 +64,21 @@ export class ModToolRoomComponent extends ModTool implements OnInit, OnDestroy
 
     public isInCurrentRoom(): boolean
     {
-        return this._modToolService.currentRoom.roomId == this._modToolService.currentRoomModData.id;
+        return this._modToolService.currentRoom.roomId == this._modToolService.currentRoomModData.data.flatId;
     }
 
     public enterRoom(): void
     {
-        this._navigatorService.goToPrivateRoom(this.room.id);
+        this._navigatorService.goToPrivateRoom(this.room.data.flatId);
     }
 
     public openChatlog(): void
     {
-        Nitro.instance.communication.connection.send(new GetRoomChatlogMessageComposer(this.room.id));
+        Nitro.instance.communication.connection.send(new GetRoomChatlogMessageComposer(this.room.data.flatId));
         this._modToolService.showRoomChatLogs = true;
     }
 
-    public get room(): ModtoolRoomInfoParser
+    public get room(): ModeratorRoomInfoMessageParser
     {
         return this._modToolService.currentRoomModData;
     }
