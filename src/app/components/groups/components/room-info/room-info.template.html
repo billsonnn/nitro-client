@@ -7,7 +7,7 @@
             </div>
             <div class="d-flex flex-column w-100 mt-2" *ngIf="open">
                 <div class="d-flex flex-row justify-content-between w-100" (click)="openInfo()">
-                    <nitro-badge class="mr-2" [badge]="groupBadgeCode" [isGroup]="true"></nitro-badge>
+                    <div badge-image class="mr-2" [badge]="groupBadgeCode" [isGroup]="true"></div>
                     <div class="group-name w-100">{{ groupName }}</div>
                 </div>
                 <button *ngIf="groupType === 0 && groupMembershipType === 0" class="btn btn-success btn-block btn-sm mt-2" (click)="join()">{{ ('group.join') | translate }}</button>

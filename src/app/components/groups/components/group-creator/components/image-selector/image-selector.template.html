@@ -3,8 +3,7 @@
         <div class="grid-container">
             <div class="grid-items grid-8">
                 <button *ngIf="!part.isBase" class="item-detail btn btn-primary btn-sm p-0" [ngClass]="{'active': part.key === 0}" (click)="selectPart(0)"><i class="fas fa-times"></i></button>
-                <button *ngFor="let item of items | keyvalue" class="item-detail btn btn-primary btn-sm p-0" [ngClass]="{'active': part.key === item.key}" (click)="selectPart(item.key)">
-                    <nitro-badge [badge]="getBadgeCode(item.key)" [isGroup]="true"></nitro-badge>
+                <button badge-image *ngFor="let item of items | keyvalue" class="item-detail btn btn-primary btn-sm p-0 badge-image" [ngClass]="{'active': part.key === item.key}" [badge]="getBadgeCode(item.key)" [isGroup]="true" [asBackground]="true" (click)="selectPart(item.key)">
                 </button>
             </div> 
         </div> 
