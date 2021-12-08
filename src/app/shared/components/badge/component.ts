@@ -1,12 +1,12 @@
-import { Component, Input } from '@angular/core';
-import { Nitro } from '@nitrots/nitro-renderer';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { BadgeImageReadyEvent, Nitro, NitroSprite, TextureUtils } from '@nitrots/nitro-renderer';
 
 @Component({
     selector: 'nitro-badge',
     template: `
     <img [src]="badgeUrl" image-placeholder />`
 })
-export class BadgeComponent
+export class BadgeComponent implements OnInit, OnDestroy
 {
     @Input()
     public badge: string = '';
@@ -17,15 +17,45 @@ export class BadgeComponent
     @Input()
     public hover?: boolean = true;
 
-    public get badgeUrl(): string
+    public badgeUrl: string = null;
+
+    constructor()
     {
-        if(this.isGroup)
+        this.onBadgeImageReadyEvent = this.onBadgeImageReadyEvent.bind(this);
+    }
+
+    public ngOnInit(): void
+    {
+        if(!this.badge || !this.badge.length) return;
+
+        const existing = (this.isGroup) ? Nitro.instance.sessionDataManager.loadGroupBadgeImage(this.badge) : Nitro.instance.sessionDataManager.loadBadgeImage(this.badge);
+
+        if(!existing)
         {
-            return ((Nitro.instance.getConfiguration<string>('badge.asset.group.url')).replace('%badgedata%', this.badge));
+            Nitro.instance.sessionDataManager.events.addEventListener(BadgeImageReadyEvent.IMAGE_READY, this.onBadgeImageReadyEvent);
         }
         else
         {
-            return ((Nitro.instance.getConfiguration<string>('badge.asset.url')).replace('%badgename%', this.badge));
+            const image = (this.isGroup) ? Nitro.instance.sessionDataManager.getGroupBadgeImage(this.badge) : Nitro.instance.sessionDataManager.getBadgeImage(this.badge);
+            const nitroSprite = new NitroSprite(image);
+
+            this.badgeUrl = TextureUtils.generateImageUrl(nitroSprite);
         }
+    }
+
+    public ngOnDestroy(): void
+    {
+        Nitro.instance.sessionDataManager.events.removeEventListener(BadgeImageReadyEvent.IMAGE_READY, this.onBadgeImageReadyEvent);
+    }
+
+    private onBadgeImageReadyEvent(event: BadgeImageReadyEvent): void
+    {
+        if(event.badgeId !== this.badge) return;
+
+        const nitroSprite = new NitroSprite(event.image);
+
+        this.badgeUrl = TextureUtils.generateImageUrl(nitroSprite);
+
+        Nitro.instance.sessionDataManager.events.removeEventListener(BadgeImageReadyEvent.IMAGE_READY, this.onBadgeImageReadyEvent);
     }
 }
