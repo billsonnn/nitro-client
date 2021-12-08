@@ -103,7 +103,12 @@ export class UserProfileService implements OnDestroy, ILinkEventTracker
             Nitro.instance.communication.connection.send(new UserCurrentBadgesComposer(this._userLoadedProfile.id));
             Nitro.instance.communication.connection.send(new UserRelationshipsComposer(this._userLoadedProfile.id));
 
-            if(parser.groups.length > 0) Nitro.instance.communication.connection.send(new GroupInformationComposer(this._userLoadedProfile.groups[0].id, false));
+            if(parser.groups.length > 0)
+            {
+                const group = this._userLoadedProfile.groups[0];
+
+                if(group) Nitro.instance.communication.connection.send(new GroupInformationComposer(group.id, false));
+            }
 
             this._settingsService.showUserProfile();
         });
