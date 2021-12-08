@@ -16,9 +16,6 @@ export class CatalogLayoutMarketplaceMarketplaceSubActivityComponent implements 
     @Input()
     public sortTypes: number[];
 
-
-
-
     @Output()
     public sortChanged = new EventEmitter<number>();
 

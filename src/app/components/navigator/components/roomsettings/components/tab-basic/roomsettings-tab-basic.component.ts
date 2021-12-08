@@ -21,20 +21,20 @@ export class NavigatorRoomSettingsTabBasicComponent
     public tradeSettings: string[];
 
     @Output()
-    onSave: EventEmitter<any> = new EventEmitter();
+    public onSave: EventEmitter<any> = new EventEmitter();
 
     @Output()
-    onDeleteRoom: EventEmitter<any> = new EventEmitter();
+    public onDeleteRoom: EventEmitter<any> = new EventEmitter();
 
     constructor()
     {}
 
-    save(): void
+    public save(): void
     {
         this.onSave.emit(this.roomSettings);
     }
 
-    deleteRoom(): void
+    public deleteRoom(): void
     {
         this.onDeleteRoom.emit();
     }
