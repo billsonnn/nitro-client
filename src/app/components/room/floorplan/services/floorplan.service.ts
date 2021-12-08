@@ -801,9 +801,9 @@ export class FloorPlanService implements OnDestroy
 
     private tileHitDettection(tileMap: NitroTilemap, tempPoint: NitroPoint, setHolding: boolean, isClick: boolean = false): boolean
     {
-       // @ts-ignore
-       const buffer = tileMap.pointsBuf;
-       const bufSize = POINT_STRUCT_SIZE;
+        // @ts-ignore
+        const buffer = tileMap.pointsBuf;
+        const bufSize = POINT_STRUCT_SIZE;
 
         const len = buffer.length;
 
@@ -865,7 +865,7 @@ export class FloorPlanService implements OnDestroy
     public getTileFromScreenPosition(x: number, y: number): [number, number]
     {
         const translatedX = x - 1024; // after centering translation
-    
+
         const realX = ((translatedX /(FloorPlanService.TILE_SIZE / 2))  + (y / (FloorPlanService.TILE_SIZE / 4))) / 2;
         const realY = ((y /(FloorPlanService.TILE_SIZE / 4)) - (translatedX / (FloorPlanService.TILE_SIZE / 2))) / 2;
 

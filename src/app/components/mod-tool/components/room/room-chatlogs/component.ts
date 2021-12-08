@@ -37,7 +37,7 @@ export class ModToolRoomChatlogsComponent extends ModToolChatlogsComponent
 
         if(!this._modToolService.currentRoomModData) return [];
 
-        return [ this._modToolService.userChatlogs]
+        return [ this._modToolService.userChatlogs];
     }
 
     public close(): void
