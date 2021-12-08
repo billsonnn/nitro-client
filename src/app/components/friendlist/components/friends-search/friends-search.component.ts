@@ -8,66 +8,66 @@ import { FriendListService } from '../../services/friendlist.service';
 })
 export class FriendListSearchComponent
 {
-  private _searchQuery: string;
+    private _searchQuery: string;
 
-  public friendsCollapsed: boolean = true;
-  public othersCollapsed: boolean = true;
+    public friendsCollapsed: boolean = true;
+    public othersCollapsed: boolean = true;
 
-  constructor(private _friendListService: FriendListService)
-  {}
+    constructor(private _friendListService: FriendListService)
+    {}
 
-  public searchAvatar(): void
-  {
-      if(this.searchQuery.trim().length === 0) return;
+    public searchAvatar(): void
+    {
+        if(this.searchQuery.trim().length === 0) return;
 
-      Nitro.instance.communication.connection.send(new HabboSearchComposer(this.searchQuery));
-  }
+        Nitro.instance.communication.connection.send(new HabboSearchComposer(this.searchQuery));
+    }
 
-  public removeFriend(data: HabboSearchResultData): void
-  {
-      if(!data) return;
+    public removeFriend(data: HabboSearchResultData): void
+    {
+        if(!data) return;
 
-      Nitro.instance.communication.connection.send(new RemoveFriendComposer(data.avatarId));
+        Nitro.instance.communication.connection.send(new RemoveFriendComposer(data.avatarId));
 
-      this._friendListService.friends.delete(data.avatarId);
-  }
+        this._friendListService.friends.delete(data.avatarId);
+    }
 
-  public openProfile(data: HabboSearchResultData): void
-  {
-      if(!data) return;
+    public openProfile(data: HabboSearchResultData): void
+    {
+        if(!data) return;
 
-      Nitro.instance.communication.connection.send(new UserProfileComposer(data.avatarId));
-  }
+        Nitro.instance.communication.connection.send(new UserProfileComposer(data.avatarId));
+    }
 
-  public sendFriendRequest(data: HabboSearchResultData): void
-  {
-      this._friendListService.avatarSearchResults.setFriendRequestSent(data.avatarId);
+    public sendFriendRequest(data: HabboSearchResultData): void
+    {
+        this._friendListService.avatarSearchResults.setFriendRequestSent(data.avatarId);
 
-      this._friendListService.sendFriendRequest(data.avatarId, data.avatarName);
-  }
+        this._friendListService.sendFriendRequest(data.avatarId, data.avatarName);
+    }
 
-  public isFriendRequestAllowed(id: number): boolean
-  {
-      return !this._friendListService.avatarSearchResults.isRequestFriend(id);
-  }
+    public isFriendRequestAllowed(id: number): boolean
+    {
+        return !this._friendListService.avatarSearchResults.isRequestFriend(id);
+    }
 
-  public get searchQuery(): string
-  {
-      return this._searchQuery;
-  }
+    public get searchQuery(): string
+    {
+        return this._searchQuery;
+    }
 
-  public set searchQuery(query: string)
-  {
-      this._searchQuery = query;
-  }
+    public set searchQuery(query: string)
+    {
+        this._searchQuery = query;
+    }
 
-  public get friends(): HabboSearchResultData[]
-  {
-      return this._friendListService.avatarSearchResults.friends;
-  }
+    public get friends(): HabboSearchResultData[]
+    {
+        return this._friendListService.avatarSearchResults.friends;
+    }
 
-  public get others(): HabboSearchResultData[]
-  {
-      return this._friendListService.avatarSearchResults.others;
-  }
+    public get others(): HabboSearchResultData[]
+    {
+        return this._friendListService.avatarSearchResults.others;
+    }
 }

@@ -14,7 +14,7 @@ export class GroupCreatorImageSelectorComponent
     public part: GroupDataBadgePart;
 
     @Output()
-    onSelect: EventEmitter<any> = new EventEmitter();
+    public onSelect: EventEmitter<any> = new EventEmitter();
 
     public getBadgeCode(id: number): string
     {
