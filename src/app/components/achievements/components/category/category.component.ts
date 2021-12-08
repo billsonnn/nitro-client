@@ -36,7 +36,7 @@ export class AchievementsCategoryComponent implements OnChanges
 
     private getAchievedBadgeId(achievement: AchievementData): string
     {
-        return (achievement.finalLevel) ? achievement.badgeId : Nitro.instance.localization.getBadgeBaseAndLevel(achievement.badgeId);
+        return (achievement.finalLevel) ? achievement.badgeId : Nitro.instance.localization.getPreviousLevelBadgeId(achievement.badgeId);
     }
 
     public getBadgeText(badge: AchievementData, desc = false): string
