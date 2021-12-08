@@ -107,7 +107,7 @@ export class InventoryBadgeService implements OnDestroy
 
     public badgeLimitReached(): boolean
     {
-        return (this._badgesInUse.length === 5);
+        return (this._badgesInUse.length === this.maxBadgeCount);
     }
 
     public wearOrClearBadge(badge: string)
@@ -137,6 +137,11 @@ export class InventoryBadgeService implements OnDestroy
         this._needsUpdate = false;
 
         Nitro.instance.communication.connection.send(new RequestBadgesComposer());
+    }
+
+    public get maxBadgeCount(): number
+    {
+        return Nitro.instance.getConfiguration<number>('max.badge.count');
     }
 
     public get controller(): InventoryMainComponent

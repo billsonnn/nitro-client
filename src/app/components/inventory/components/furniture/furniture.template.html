@@ -13,7 +13,7 @@
     <ng-container *ngIf="hasGroupItems">
         <div class="col-7 d-flex flex-column" style="z-index: 1;">
             <div class="d-flex mb-2">
-                <div class="d-flex justify-content-center align-items-center bg-secondary border shadow px-2"><i class="fas fa-search"></i></div>
+                <button type="button" class="btn btn-secondary btn-sm"><i class="fas fa-search"></i></button>
                 <input type="text" class="form-control form-control-sm flex-grow-1" [(ngModel)]="search" />
                 <select class="form-control form-control-sm w-auto" [(ngModel)]="searchType">
                     <option [value]="''">{{ ('inventory.filter.option.everything') | translate }}</option>
@@ -55,11 +55,11 @@
                 style="z-index: 1;">
                 <div class="d-flex justify-content-center align-items-center w-100 h-100">{{ selectedGroup.name }}</div>
                 <div class="btn-group-vertical w-100">
-                    <button *ngIf="!tradeRunning && canPlace" type="button" class="btn btn-secondary w-100"
+                    <button *ngIf="!tradeRunning && canPlace" type="button" class="btn btn-secondary btn-sm w-100"
                         (click)="attemptItemPlacement()">{{ ('inventory.furni.placetoroom') | translate }}</button>
-                    <button *ngIf="selectedGroup.isSellable" type="button" class="btn btn-secondary w-100"
+                    <button *ngIf="selectedGroup.isSellable" type="button" class="btn btn-secondary btn-sm w-100"
                             (click)="offerOnMarketplace()">{{ 'inventory.marketplace.sell' | translate }}</button>
-                    <button *ngIf="tradeRunning" type="button" class="btn btn-secondary w-100"
+                    <button *ngIf="tradeRunning" type="button" class="btn btn-secondary btn-sm w-100"
                         (click)="attemptItemOffer()" [ngClass]="{ 'disabled': !selectedGroup.getUnlockedCount()} ">{{
                         ('inventory.trading.offer') | translate }}</button>
                 </div>

@@ -6,7 +6,7 @@
     <div class="row p-3">
         <div class="col d-flex flex-column">
             <div class="btn-group">
-                <button type="button" *ngFor="let category of categories.getValues()" class="btn btn-secondary" [ngClass]="{ 'active': (activeCategory === category) }" (click)="selectCategory(category.name)">{{ ('avatareditor.category.' + category.name) | translate }}</button>
+                <button type="button" *ngFor="let category of categories.getValues()" class="btn btn-secondary btn-sm" [ngClass]="{ 'active': (activeCategory === category) }" (click)="selectCategory(category.name)">{{ ('avatareditor.category.' + category.name) | translate }}</button>
             </div>
             <div *ngIf="activeCategory" class="d-flex flex-column" nitro-avatar-model-viewer-component [model]="activeCategory" [gender]="gender"></div>
         </div>
