@@ -11,8 +11,8 @@
     <app-root></app-root>
     <script>
         var NitroConfig = {
-            configurationUrls: [ 'renderer-config.json', 'ui-config.json' ],
-            sso: (new URLSearchParams(window.location.search).get('sso') || null)
+            "config.urls": [ 'renderer-config.json', 'ui-config.json' ],
+            "sso.ticket": (new URLSearchParams(window.location.search).get('sso') || null)
         };
     </script>
 </body>
