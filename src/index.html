@@ -11,12 +11,12 @@
     <app-root></app-root>
     <script>
         var NitroConfig = {
-            "config.urls": ("%NITRO_CONFIG_URLS%").split(','),
+            "config.urls": ("%NG_APP_CONFIG_URLS%").split(','),
             "sso.ticket": (new URLSearchParams(window.location.search).get('sso') || null),
-            "socket.url": "%NITRO_SOCKET_URL%",
-            "asset.url": "%NITRO_ASSET_URL%",
-            "image.library.url": "%NITRO_IMAGE_LIBRARY_URL%",
-            "hof.furni.url": "%NITRO_HOF_FURNI_URL%"
+            "socket.url": "%NG_APP_SOCKET_URL%",
+            "asset.url": "%NG_APP_ASSET_URL%",
+            "image.library.url": "%NG_APP_IMAGE_LIBRARY_URL%",
+            "hof.furni.url": "%NG_APP_HOF_FURNI_URL%"
         };
     </script>
 </body>
