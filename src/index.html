@@ -11,8 +11,12 @@
     <app-root></app-root>
     <script>
         var NitroConfig = {
-            "config.urls": [ 'renderer-config.json', 'ui-config.json' ],
-            "sso.ticket": (new URLSearchParams(window.location.search).get('sso') || null)
+            "config.urls": ("%NITRO_CONFIG_URLS%").split(','),
+            "sso.ticket": (new URLSearchParams(window.location.search).get('sso') || null),
+            "socket.url": "%NITRO_SOCKET_URL%",
+            "asset.url": "%NITRO_ASSET_URL%",
+            "image.library.url": "%NITRO_IMAGE_LIBRARY_URL%",
+            "hof.furni.url": "%NITRO_HOF_FURNI_URL%"
         };
     </script>
 </body>

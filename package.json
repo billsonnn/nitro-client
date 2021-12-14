@@ -40,6 +40,7 @@
     "@angular/cli": "^13.0.4",
     "@angular/compiler-cli": "^13.0.3",
     "@angularclass/hmr": "^3.0.0",
+    "@ngx-env/builder": "^2.0.2",
     "@types/node": "^14.17.9",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
