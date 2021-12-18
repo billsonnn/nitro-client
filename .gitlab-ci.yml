@@ -17,11 +17,10 @@ ESLinter:
 Build Nitro:
     stage: build
     script:
-        - npm i
-        - npm update @nitrots/nitro-renderer
-        - cp src/index.html.example src/index.html
+        - cp src/.env.example src/.env
         - cp src/renderer-config.json.example src/renderer-config.json
         - cp src/ui-config.json.example src/ui-config.json
+        - npm i
         - npm run build-prod
     cache:
         key: ${CI_COMMIT_BRANCH}
