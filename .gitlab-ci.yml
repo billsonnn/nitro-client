@@ -6,7 +6,7 @@ stages:
     - build
 
 Install Dependencies:
-    state: install-dependencies
+    stage: install-dependencies
     script:
         - yarn install
     cache:
