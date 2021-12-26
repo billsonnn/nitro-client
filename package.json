@@ -1,6 +1,18 @@
 {
   "name": "nitro-client",
-  "version": "1.1.0",
+  "version": "1.1.2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.krews.org/nitro/nitro-client.git"
+  },
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://git.krews.org/nitro/nitro-client/issues"
+  },
+  "homepage": "https://git.krews.org/nitro/nitro-client",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -10,36 +22,34 @@
     "postinstall": "node ./post-install.js"
   },
   "type": "module",
-  "private": true,
   "dependencies": {
     "@angular-slider/ngx-slider": "^2.0.3",
-    "@angular/animations": "^13.0.3",
-    "@angular/cdk": "^13.0.3",
-    "@angular/common": "^13.0.3",
-    "@angular/compiler": "^13.0.3",
-    "@angular/core": "^13.0.3",
-    "@angular/forms": "^13.0.3",
-    "@angular/localize": "^13.0.3",
-    "@angular/platform-browser": "^13.0.3",
-    "@angular/platform-browser-dynamic": "^13.0.3",
-    "@angular/router": "^13.0.3",
-    "@ng-bootstrap/ng-bootstrap": "^10.0.0",
-    "@nitrots/nitro-renderer": "git+https://git@git.krews.org/nitro/nitro-renderer#main",
-    "angular-bootstrap-md": "^11.1.0",
+    "@angular/animations": "^13.1.1",
+    "@angular/cdk": "^13.1.1",
+    "@angular/common": "^13.1.1",
+    "@angular/compiler": "^13.1.1",
+    "@angular/core": "^13.1.1",
+    "@angular/forms": "^13.1.1",
+    "@angular/localize": "^13.1.1",
+    "@angular/platform-browser": "^13.1.1",
+    "@angular/platform-browser-dynamic": "^13.1.1",
+    "@angular/router": "^13.1.1",
+    "@ng-bootstrap/ng-bootstrap": "^11.0.0",
+    "@nitrots/nitro-renderer": "^1.1.2",
     "emoji-toolkit": "^6.6.0",
     "ngx-color": "^7.3.3",
     "ngx-pagination": "^5.1.1",
     "ngx-perfect-scrollbar": "^10.1.1",
-    "ngx-toastr": "^14.2.1",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.1",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^13.0.4",
-    "@angular/cli": "^13.0.4",
-    "@angular/compiler-cli": "^13.0.3",
+    "@angular-devkit/build-angular": "^13.1.2",
+    "@angular/cli": "^13.1.2",
+    "@angular/compiler-cli": "^13.1.1",
     "@angularclass/hmr": "^3.0.0",
+    "@ngx-env/builder": "^2.0.2",
     "@types/node": "^14.17.9",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",

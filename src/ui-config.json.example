@@ -1,5 +1,5 @@
 {
-    "url.prefix": "https://URL",
+    "url.prefix": "URL",
     "achievements.images.url": "${image.library.url}Quests/%image%.png",
     "achievements.unseen.ignored": [
         "ACH_AllTimeHotelPresence"
@@ -16,8 +16,7 @@
     "displayed.currency.types": [
         -1,
         0,
-        5,
-        101
+        5
     ],
     "hotelview.images": {
         "background": "${asset.url}/images/reception/stretch_blue.png",

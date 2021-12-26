@@ -1,13 +1,22 @@
-image: node:14.18
+image: node:16.13
 
 stages:
+    - install-dependencies
     - test
     - build
+
+Install Dependencies:
+    stage: install-dependencies
+    script:
+        - yarn install
+    cache:
+        key: ${CI_COMMIT_BRANCH}
+        paths:
+            - node_modules
 
 ESLinter:
     stage: test
     script:
-        - npm i
         - node ./node_modules/eslint/bin/eslint.js src/
     cache:
         key: ${CI_COMMIT_BRANCH}
@@ -17,12 +26,10 @@ ESLinter:
 Build Nitro:
     stage: build
     script:
-        - npm i
-        - npm update @nitrots/nitro-renderer
-        - cp src/index.html.example src/index.html
+        - cp .env.example .env
         - cp src/renderer-config.json.example src/renderer-config.json
         - cp src/ui-config.json.example src/ui-config.json
-        - npm run build-prod
+        - yarn build-prod
     cache:
         key: ${CI_COMMIT_BRANCH}
         paths:

@@ -42,7 +42,7 @@ export class AppComponent implements OnInit, OnDestroy
 
             if(!Nitro.instance)
             {
-                NitroVersion.UI_VERSION = '1.1.0';
+                NitroVersion.UI_VERSION = '1.1.2';
                 Nitro.bootstrap();
             }
 

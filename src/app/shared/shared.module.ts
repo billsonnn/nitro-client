@@ -5,11 +5,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbDropdownModule, NgbModalModule, NgbModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { ColorChromeModule } from 'ngx-color/chrome';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
-import { ToastrModule } from 'ngx-toastr';
 import { AvatarImageComponent } from './components/avatarimage/component';
 import { CurrencyIconComponent } from './components/currency-icon/currency-icon.component';
 import { FurnitureImageComponent } from './components/furniture-image/furniture-image.component';
@@ -42,14 +40,12 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        ToastrModule.forRoot(),
         NgbDropdownModule,
         NgbTooltipModule,
         NgbModalModule,
         NgxPaginationModule,
         NgxSliderModule,
         PerfectScrollbarModule,
-        MDBBootstrapModule.forRoot(),
         ColorChromeModule,
         NgbModule
     ],
@@ -57,14 +53,12 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        ToastrModule,
         NgbDropdownModule,
         NgbTooltipModule,
         NgbModalModule,
         NgxPaginationModule,
         NgxSliderModule,
         PerfectScrollbarModule,
-        MDBBootstrapModule,
         ColorChromeModule,
         AvatarImageComponent,
         CurrencyIconComponent,
