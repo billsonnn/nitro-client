@@ -18,6 +18,10 @@ ESLinter:
     stage: test
     script:
         - node ./node_modules/eslint/bin/eslint.js src/
+    cache:
+        key: ${CI_COMMIT_BRANCH}
+        paths:
+            - node_modules
 
 Build Nitro:
     stage: build
@@ -26,6 +30,10 @@ Build Nitro:
         - cp src/renderer-config.json.example src/renderer-config.json
         - cp src/ui-config.json.example src/ui-config.json
         - yarn build-prod
+    cache:
+        key: ${CI_COMMIT_BRANCH}
+        paths:
+            - node_modules
     artifacts:
         expire_in: 2 weeks
         paths:
