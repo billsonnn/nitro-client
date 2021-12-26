@@ -1,7 +1,7 @@
 image: node:16.13
 
 stages:
-    - install-depdencies
+    - install-dependencies
     - test
     - build
 
