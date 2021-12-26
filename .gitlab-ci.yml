@@ -1,4 +1,4 @@
-image: node:14.18
+image: node:16.13
 
 stages:
     - test
@@ -20,8 +20,8 @@ Build Nitro:
         - cp src/.env.example src/.env
         - cp src/renderer-config.json.example src/renderer-config.json
         - cp src/ui-config.json.example src/ui-config.json
-        - npm i
-        - npm run build-prod
+        - yarn install
+        - yarn build-prod
     cache:
         key: ${CI_COMMIT_BRANCH}
         paths:
