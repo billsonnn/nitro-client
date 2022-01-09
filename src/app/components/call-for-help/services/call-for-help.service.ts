@@ -1,6 +1,7 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { CallForHelpResultMessageEvent, IMessageEvent, Nitro } from '@nitrots/nitro-renderer';
+import { CallForHelpResultMessageEvent, GetPendingCallsForHelpMessageComposer, IMessageEvent, IssueCloseNotificationMessageEvent, Nitro } from '@nitrots/nitro-renderer';
 import { NotificationService } from '../../notification/services/notification.service';
+import { CallForHelpResult } from '../common/CallForHelpResult';
 import { CallForHelpMainComponent } from '../components/main/main.component';
 
 @Injectable()
@@ -41,7 +42,8 @@ export class CallForHelpService implements OnDestroy
         if(this._messages) this.unregisterMessages();
 
         this._messages = [
-            new CallForHelpResultMessageEvent(this.onCallForHelpResultMessageEvent.bind(this))
+            new CallForHelpResultMessageEvent(this.onCallForHelpResultMessageEvent.bind(this)),
+            new IssueCloseNotificationMessageEvent(this.onIssueCloseNotificationMessageEvent.bind(this))
         ];
 
         for(const message of this._messages) Nitro.instance.communication.registerMessageEvent(message);
@@ -65,9 +67,39 @@ export class CallForHelpService implements OnDestroy
 
         let message = parser.messageText;
 
+        switch(parser.resultType)
+        {
+            case CallForHelpResult.TOO_MANY_PENDING_CALLS_CODE:
+                Nitro.instance.communication.connection.send(new GetPendingCallsForHelpMessageComposer());
+                message = Nitro.instance.getLocalization('${help.cfh.error.pending}');
+                this._ngZone.run(() => this._notificationService.alert(message, '${help.cfh.error.title}'));
+                break;
+            case CallForHelpResult.HAS_ABUSIVE_CALL_CODE:
+                message = Nitro.instance.getLocalization('${help.cfh.error.abusive}');
+                this._ngZone.run(() => this._notificationService.alert(message, '${help.cfh.error.title}'));
+                break;
+            default:
+                if(message === '')
+                {
+                    message = Nitro.instance.getLocalization('${help.cfh.sent.text}');
+                }
+                this._ngZone.run(() => this._notificationService.alert(message, '${help.cfh.sent.title}'));
+        }
+    }
+
+    private onIssueCloseNotificationMessageEvent(event: IssueCloseNotificationMessageEvent): void
+    {
+        if(!event) return;
+
+        const parser = event.getParser();
+
+        if(!parser) return;
+
+        let message = parser.messageText;
+
         if(message === '')
         {
-            message = Nitro.instance.getLocalization('${help.cfh.closed.' + CallForHelpService.getReasonAsString(parser.resultType) + '}');
+            message = Nitro.instance.getLocalization('${help.cfh.closed.' + CallForHelpService.getReasonAsString(parser.closeReason) + '}');
         }
 
         this._ngZone.run(() => this._notificationService.alert(message, '${mod.alert.title}'));
