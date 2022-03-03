@@ -6,7 +6,7 @@
     "images.url": "${asset.url}/images",
     "gamedata.url": "${asset.url}/gamedata",
     "sounds.url": "${asset.url}/sounds/%sample%.mp3",
-    "external.texts.url": [ "${gamedata.url}/ExternalTexts.json", "${gamedata.url}/UITexts.json" ],
+    "external.texts.url": [ "${gamedata.url}/ExternalTexts.json" ],
     "external.samples.url": "${hof.furni.url}/mp3/sound_machine_sample_%sample%.mp3",
     "furnidata.url": "${gamedata.url}/FurnitureData.json",
     "productdata.url": "${gamedata.url}/ProductData.json",
@@ -100,6 +100,8 @@
     ],
     "preload.assets.urls": [
         "${asset.url}/bundled/generic/avatar_additions.nitro",
+        "${asset.url}/bundled/generic/group_badge.nitro",
+        "${asset.url}/bundled/generic/floor_editor.nitro",
         "${images.url}/loading_icon.png",
         "${images.url}/clear_icon.png",
         "${images.url}/big_arrow.png"
